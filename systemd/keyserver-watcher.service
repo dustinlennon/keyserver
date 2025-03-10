@@ -1,0 +1,12 @@
+[Unit]
+Description=keyserver watcher
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/keyserver
+EnvironmentFile=/opt/keyserver/dotenv
+ExecStart=/usr/bin/python3 ./scripts/generate.py
+
+[Install]
+WantedBy=multi-user.target

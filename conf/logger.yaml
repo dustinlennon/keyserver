@@ -1,0 +1,14 @@
+loggers:
+- level: WARNING
+
+- qualname: __main__
+  level: INFO
+
+- qualname: app
+  level: INFO
+  logfile: logs/app.log
+
+- qualname: app.base_params
+  level: DEBUG
+  propagate: True
+  logfile: logs/base_params.log

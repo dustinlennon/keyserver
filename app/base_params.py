@@ -1,45 +1,24 @@
-from types import SimpleNamespace
 from typing import Optional
 
 from abc import ABC
 
 import os
+import sys
 import re
 import datetime, pytz
 import argparse
 
-import yaml
-try:
-    from yaml import CLoader as Loader, CDumper as Dumper
-except ImportError:
-    from yaml import Loader
-
+from app.config import get_config
 from app.dotenv_reader import DotenvReader
 from app.exception_throwing_parser import ExceptionThrowingParser, ParserFallbackException
 
-#- get_config -----------------------------------------------------------------
+from app.logger_factory import LoggerFactory
+factory = LoggerFactory()
 
-def get_config(config_path):
-  with open(config_path) as f:
-    config = yaml.load(f, Loader=Loader)
-    if config is not None:
-      config = _preprocess(config)
-  return config
-
-def _preprocess(d):
-  obj = d
-  if isinstance(d, list):
-    dx = []
-    for o in d:
-      dx.append( _preprocess(o) )
-    obj = dx
-  elif isinstance(d, dict):
-    dx = {}
-    for k,v in d.items():
-      dx[k] = _preprocess(v)
-    obj = SimpleNamespace(**dx)
-
-  return obj
+def _printf_debug(msg):
+  if os.environ.get("PRINTF_DEBUG"):
+    msg = f">>> {msg}"
+    print(msg, file = sys.stderr)
 
 #- BaseParams -----------------------------------------------------------------
 
@@ -49,7 +28,7 @@ class BaseParams(ABC):
 
   def __init__(self, cfg):
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", help = "a yaml config file")
+    parser.add_argument("--config", metavar="", help = "a yaml config file")
 
     for name, default_value in vars(cfg.env).items():
       full_name   = f"{self._prefix}_{name}"
@@ -64,7 +43,8 @@ class BaseParams(ABC):
       parser.add_argument(
         f"--{param_name}",
         default = getattr(self, attr_name),
-        help=f"{env_name}"
+        metavar="",
+        help=f"Overrides {env_name}. The current default value is '{value}'"
       )
 
     self.parser = parser
@@ -89,7 +69,12 @@ class BaseParams(ABC):
 
   def parse_args(self):
     args = self.parser.parse_args()
-    print(args)
+
+    factory = LoggerFactory()
+    factory.configure(args.logconf_path)
+
+    self.timezone = args.timezone
+
 
   @classmethod
   def from_path(cls, config_path):
@@ -103,7 +88,6 @@ class BaseParams(ABC):
     instance = None
 
     try:
-      print("trying from_env()")
       instance = cls.from_env()
     except KeyError:
       pass
@@ -111,7 +95,6 @@ class BaseParams(ABC):
       return instance
 
     try:
-      print("trying from_args()")
       instance = cls.from_args(Parser = ExceptionThrowingParser)
     except ParserFallbackException as e:
       exit_args = (e.parser, 2, str(e))
@@ -119,7 +102,6 @@ class BaseParams(ABC):
       return instance
 
     try:
-      print("trying from_dotenv()")
       instance = cls.from_dotenv()
     except Exception as e:
       argparse.ArgumentParser.exit(*exit_args)
@@ -128,6 +110,7 @@ class BaseParams(ABC):
 
   @classmethod
   def from_env(cls):
+    _printf_debug("searching for config: trying from_env()")
     env_name = f"{cls._prefix}_CONFIG_PATH"
     config = os.environ[env_name]
     instance = cls.from_path(config)
@@ -135,6 +118,7 @@ class BaseParams(ABC):
 
   @classmethod
   def from_args(cls, Parser = argparse.ArgumentParser):
+    _printf_debug("searching for config: trying from_args()")
     parser = Parser()
     parser.add_argument("--config", required = True, help = "a yaml config file")
 
@@ -145,6 +129,7 @@ class BaseParams(ABC):
 
   @classmethod
   def from_dotenv(cls):
+    _printf_debug("searching for config: trying from_dotenv()")
     locs = [ p for p in 
       [
         cls._opt_path,
@@ -162,10 +147,3 @@ class BaseParams(ABC):
     self._tz  = pytz.timezone(self.timezone)
     return datetime.datetime.now(self._tz)
 
-if __name__ == '__main__':
-
-  class KeyserverParams(BaseParams):
-    _prefix = "KEYSERVER"
-
-  params = KeyserverParams.build()
-  params.parse_args()

@@ -1,4 +1,10 @@
+base: &base_params
+  APP_PATH: ./app
+  TIMEZONE: US/Pacific
+
 env:
-  path: .
-  timezone: US/Pacific
+  <<: *base_params
+  KEYS_PATH: ./keys
+  WWW_PATH: ./www
+
 net_name: mrdl

@@ -3,7 +3,7 @@ import os
 
 class DotenvReader(object):
   def __init__(self, locs):
-    self.locs = [ l for l in locs if l ]
+    self.locs = locs
 
   def read(self) -> dict:
     result = None

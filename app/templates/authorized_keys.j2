@@ -1,0 +1,5 @@
+# updated at {{ updated_at }}
+{{ key }}
+{% if include_cert -%}
+cert-authority,principals="{{user}}" {{ cert }}
+{% endif %}

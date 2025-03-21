@@ -6,8 +6,8 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
-def get_config():
-  with open("config.yaml") as f:
+def get_config(config_path):
+  with open(config_path) as f:
     config = load(f, Loader=Loader)
     config = SimpleNamespace(**config)
   return config

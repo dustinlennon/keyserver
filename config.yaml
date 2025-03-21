@@ -1,2 +1,4 @@
-ssh_path: /home/dnlennon/.ssh
+env:
+  path: .
+  timezone: US/Pacific
 net_name: mrdl

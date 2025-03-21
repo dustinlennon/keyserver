@@ -1,3 +1,7 @@
+#
+# Freshen authorized_keys for the 'ubuntu' service account.  This runs on managed
+# nodes.  
+#
 
 import requests
 import logging
@@ -5,13 +9,16 @@ from logging.handlers import RotatingFileHandler
 import sys
 import argparse
 from pathlib import Path
+from .shared import get_config
 
+config = get_config("config-client.yaml")
+
+#--- global parser and logger -------------------------------------------------
 parser = argparse.ArgumentParser()
 parser.add_argument("--keyfile", default = "ubuntu_key_cert")
 parser.add_argument("--output")
 parser.add_argument("--logfile", default = "logs/pull_keys.log")
 parser.add_argument("--console", action = "store_true")
-
 
 logger = logging.getLogger(__name__)
 
@@ -25,14 +32,15 @@ def set_logger(logfile, console = False):
   except (PermissionError,) as e:
     console = True
 
+  # define the Formatter
   formatter_args = {
     'style' : '{',
     'datefmt' : "%Y-%m-%d %H:%M:%S",
     'fmt' : "[{asctime}] {levelname:<8} {message}"
   }
-
   formatter = logging.Formatter(**formatter_args)
 
+  # instantiate a Handler
   if console:
     handler = logging.StreamHandler(sys.stderr)
   else:
@@ -54,12 +62,11 @@ def write_content(output, content):
     raise e
      
 #--- main ---------------------------------------------------------------------
-if __name__ == '__main__':
-
+if __name__ == '__main__': 
   args = parser.parse_args()
   set_logger(args.logfile, args.console)
 
-  url = f"http://192.168.1.104:8022/{args.keyfile}"
+  url = f"http://{config.keyserver}/{args.keyfile}"
   output = args.output or f"/home/ubuntu/.ssh/authorized_keys"
 
   try:

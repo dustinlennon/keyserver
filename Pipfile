@@ -8,6 +8,7 @@ jinja2 = "*"
 requests = "*"
 pyyaml = "*"
 pytz = "*"
+scaffold = {git = "https://github.com/dustinlennon/scaffold-params"}
 
 [dev-packages]
 

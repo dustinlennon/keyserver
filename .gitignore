@@ -1,6 +1,6 @@
 __pycache__
-aux
-www
-.env
+samples
 assets
 logs
+.env
+*tgz

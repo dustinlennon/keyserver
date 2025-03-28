@@ -4,7 +4,8 @@ charset-normalizer==3.4.1; python_version >= '3.7'
 idna==3.10; python_version >= '3.6'
 jinja2==3.1.6; python_version >= '3.7'
 markupsafe==3.0.2; python_version >= '3.9'
-pytz==2025.1
+pytz==2025.2
 pyyaml==6.0.2; python_version >= '3.8'
 requests==2.32.3; python_version >= '3.8'
+scaffold @ git+https://github.com/dustinlennon/scaffold-params@c903b226197eb882a391be29e42d058f0894976d
 urllib3==2.3.0; python_version >= '3.9'

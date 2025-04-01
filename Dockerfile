@@ -1,6 +1,6 @@
 # Use ./setup.sh script to build image
 
-FROM python:3.12-alpine3.21
+FROM python:3.12.3-alpine
 RUN apk add git
 
 ENV APP_PATH=/home/keyserver

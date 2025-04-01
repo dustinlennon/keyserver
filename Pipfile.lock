@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "94e3b445b5339ae6cd6dee414eca873b467306ce145c94f78c8a70a96e5abeb1"
+            "sha256": "fc8919d19381eecb08dc14eff1c6a5eb4ccb467f14d4078544bd8a57383f2557"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -286,7 +286,7 @@
         },
         "scaffold": {
             "git": "https://github.com/dustinlennon/scaffold-params",
-            "ref": "c903b226197eb882a391be29e42d058f0894976d"
+            "ref": "8876862649ea50ef156f2315f5419698ff993d6d"
         },
         "urllib3": {
             "hashes": [

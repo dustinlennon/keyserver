@@ -1,35 +1,32 @@
-import os
-
 from scaffold.params.base_params import BaseParams
 from scaffold.params.mixins import *
+from scaffold.debug import TraceClassDecorator
 
 if __name__ == '__main__':
 
   class CommonParams(NowMixin, LoggerInitMixin, JinjaTemplateMixin):
     pass
 
+  @TraceClassDecorator(mro = True)
   class KeyserverParams(BaseParams, CommonParams):
-    _prefix = "KEYSERVER"
+    _prefix = "KSCREATE"
 
     def assign_args(self, args):
       super().assign_args(args)
       self.keys_path    = args.keys_path
       self.assets_path  = args.assets_path
-      self.network_name = args.network_name
 
-  params = KeyserverParams.build()
-  args = params.parse_args()
-
-  logger = params.get_logger(__name__)
+  params  = KeyserverParams.build()
+  logger  = params.get_logger(__name__)
 
   # public key metadata
-  pk_meta = {
-    'ca'      : f"{params.keys_path}/{params.network_name}_ca.pub",
-    'ubuntu'  : f"{params.keys_path}/{params.network_name}_ubuntu.pub"
+  pk_map = {
+    pkid : f"{params.keys_path}/{keyfile}"
+    for pkid, keyfile in vars(params.aux.pk_map).items()
   }
 
   pub_keys = {}
-  for key_id,key_file in pk_meta.items():
+  for key_id,key_file in pk_map.items():
     with open(key_file) as f:
       pub_keys[key_id] = f.read().strip()
 

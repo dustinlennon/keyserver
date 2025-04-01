@@ -1,1 +1,2 @@
-KEYSERVER_CONFIG_PATH=./conf/keyserver.yaml
+KSCREATE_CONFIG_PATH=/home/dnlennon/Workspace/Sandbox/keyserver-service/conf/kscreate.yaml
+KSREQUEST_CONFIG_PATH=/home/dnlennon/Workspace/Sandbox/keyserver-service/conf/ksrequest.yaml

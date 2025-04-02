@@ -4,6 +4,4 @@
 sudo systemctl enable \
 	./kssite.service \
 	./kscreate.service \
-	./kscreate-watcher.path \
-	./ksrequest.service \
-	./ksrequest.timer
+	./kscreate-watcher.path

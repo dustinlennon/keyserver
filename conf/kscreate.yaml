@@ -12,7 +12,7 @@ env_template: &template
 
 env:
   <<: [*base, *logger, *timezone, *template]
-  keys_path: !env ${HOME}/.ssh/keys/mrdl
+  keys_path: ./keys
   assets_path: ./assets
 
 conf: 
@@ -20,6 +20,7 @@ conf:
     pk_map:
       ca:     mrdl_ca.pub
       ubuntu: mrdl_ubuntu.pub
+
   logger:
     loggers:
     - level: INFO

@@ -7,7 +7,6 @@ env_logger: &logger
 
 env:
   <<: [*base, *logger]
-  keys_path: !env ${HOME}/.ssh/keys/ksclient
 
 conf: 
   main:
@@ -15,7 +14,6 @@ conf:
       scheme: http
       netloc: 192.168.1.104:8022
       path: ubuntu_key_cert
-    pubkey: mrdl_ubuntu.pub
 
   logger:
     loggers:

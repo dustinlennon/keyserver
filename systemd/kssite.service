@@ -7,9 +7,8 @@ Description=keyserver kssite
 Type=exec
 Restart=on-success
 WorkingDirectory=/opt/keyserver
-EnvironmentFile=/opt/keyserver/dotenv
-ExecStartPre=docker compose -f docker-compose.yaml run --rm create
-ExecStart=docker compose -f docker-compose.yaml up site
+ExecStartPre=docker compose -f /opt/keyserver/conf/compose.yaml run --rm create
+ExecStart=docker compose -f /opt/keyserver/conf/compose.yaml up site
 
 [Install]
 WantedBy=multi-user.target

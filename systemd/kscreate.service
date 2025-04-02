@@ -5,5 +5,5 @@ StopWhenUnneeded=true
 [Service]
 Type=oneshot
 WorkingDirectory=/opt/keyserver
-EnvironmentFile=/opt/keyserver/dotenv
-ExecStart=docker compose -f docker-compose.yaml run --rm create
+ExecStart=/opt/keyserver/freshen-keys.sh
+ExecStart=docker compose -f /opt/keyserver/conf/compose.yaml run --rm create

@@ -1,9 +1,10 @@
 __pycache__
+assets
+keys
 samples
 gitpip.sh
 build_image.sh
 scaffold-logs
-assets
 logs
 .env
 *tgz

@@ -15,12 +15,9 @@ class KsRequestParams(BaseParams, LoggerInitializerMixin):
 
   def assign_params(self, conf, args):
     super().assign_params(conf, args)
-    self.keys_path    = str(args.keys_path)
 
     u = conf.main.url
     self.url = f"{u.scheme}://{u.netloc}/{u.path}"
-
-    self.pubkey = conf.main.pubkey
 
 # --- main --------------------------------------------------------------------
 
@@ -28,11 +25,6 @@ if __name__ == '__main__':
 
   params  = KsRequestParams.build()
   logger  = params.get_logger("keyserver.ksrequest")
-
-  # Create output directory
-  pth = Path(params.keys_path)
-  pth.mkdir(parents = True, exist_ok = True)
-  pth.chmod(0o700)
 
   # Make HTTP request   
   try:
@@ -51,15 +43,6 @@ if __name__ == '__main__':
   else:
     content = r.content
 
-  # Output the file
-  try:
-    pk = pth / params.pubkey
-    with open(pk, "wb") as f:
-      f.write(content)
-    logger.info(f"wrote {pk}")
-
-  except (FileNotFoundError, PermissionError) as e:
-    logger.error(str(e))
-    logger.error(msg)
-    sys.exit(1)
+  logger.info("acquired authorized_keys")
+  print(content.decode("utf8"))
 

@@ -1,4 +1,3 @@
-
 env_base: &base
   install_path: !env ${PWD}
 
@@ -7,17 +6,14 @@ env_logger: &logger
 
 env:
   <<: [*base, *logger]
-  keys_path: !env ${HOME}/.ssh/keys/ksclient
+  assets_path: ./assets
 
 conf: 
-  ksrequest:
-    url:
-      scheme: http
-      netloc: 192.168.1.104:8022
-      path: ubuntu_key_cert
-
+  main:
+    bind_addr: 0.0.0.0
+    port: 8022
   logger:
     loggers:
     - level: INFO
-      logfile: ksrequest.log
+      logfile: kssite.log
       add_console: True

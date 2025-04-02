@@ -7,22 +7,23 @@ if __name__ == '__main__':
   class CommonParams(NowMixin, LoggerInitMixin, JinjaTemplateMixin):
     pass
 
-  @TraceClassDecorator(mro = True)
-  class KeyserverParams(BaseParams, CommonParams):
+  # @TraceClassDecorator(mro = True)
+  class KsCreateParams(BaseParams, CommonParams):
     _prefix = "KSCREATE"
 
-    def assign_args(self, args):
-      super().assign_args(args)
+    def assign_args(self, conf, args):
+      super().assign_args(conf, args)
       self.keys_path    = args.keys_path
       self.assets_path  = args.assets_path
+      self.pk_map       = conf.kscreate.pk_map
 
-  params  = KeyserverParams.build()
+  params  = KsCreateParams.build()
   logger  = params.get_logger(__name__)
 
   # public key metadata
   pk_map = {
     pkid : f"{params.keys_path}/{keyfile}"
-    for pkid, keyfile in vars(params.aux.pk_map).items()
+    for pkid, keyfile in vars(params.pk_map).items()
   }
 
   pub_keys = {}

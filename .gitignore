@@ -1,5 +1,7 @@
 __pycache__
 samples
+gitpip.sh
+scaffold-logs
 assets
 logs
 .env

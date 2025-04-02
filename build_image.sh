@@ -25,7 +25,7 @@ tar \
 >&2 echo "Creating requirements.txt"
 pipenv requirements > requirements.txt
 
->&2 echo "Building image: $KEYSERVER"
+>&2 echo "Building image: $IMAGE_NAME"
 docker build \
-	--tag $KEYSERVER:latest \
+	--tag ${IMAGE_NAME}:latest \
 	.

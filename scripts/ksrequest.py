@@ -1,7 +1,6 @@
 import sys
 
 from pathlib import Path
-from urllib.parse import ParseResult, urlunparse
 
 from scaffold.params.base_params import BaseParams
 from scaffold.params.mixins import *
@@ -11,15 +10,15 @@ import requests.exceptions
 
 if __name__ == '__main__':
 
-  class CommonParams(NowMixin, LoggerInitMixin):
-    pass
-
-  class KsRequestParams(BaseParams, CommonParams):
+  class KsRequestParams(BaseParams, NowMixin, LoggerInitMixin):
     _prefix = "KSREQUEST"
 
-    def assign_args(self, args):
-      super().assign_args(args)
+    def assign_args(self, conf, args):
+      super().assign_args(conf, args)
       self.keys_path    = str(args.keys_path)
+
+      u = conf.ksrequest.url
+      self.url = f"{u.scheme}://{u.netloc}/{u.path}"
 
   params  = KsRequestParams.build()
   logger  = params.get_logger(__name__)
@@ -29,16 +28,13 @@ if __name__ == '__main__':
   pth.mkdir(parents = True, exist_ok = True)
   pth.chmod(0o700)
 
-  # Make HTTP request 
-  u = params.aux.url
-  url = f"{u.scheme}://{u.netloc}/{u.path}"
-  
+  # Make HTTP request   
   try:
-    r : requests.Response = requests.get(url, timeout = 1)
+    r : requests.Response = requests.get(params.url, timeout = 1)
     r.raise_for_status()
 
   except requests.exceptions.HTTPError as e:
-    msg = f"HTTP/{r.status_code} : {url}"
+    msg = f"HTTP/{r.status_code} : {params.url}"
     logger.info(msg)
     sys.exit(0)
 

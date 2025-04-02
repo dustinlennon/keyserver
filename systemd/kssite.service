@@ -1,0 +1,15 @@
+[Unit]
+Description=keyserver kssite
+# Before=authorized-keys-watcher.path
+# Requires=keyserver-watcher.path keyserver-watcher.service
+
+[Service]
+Type=exec
+Restart=on-success
+WorkingDirectory=/opt/keyserver
+EnvironmentFile=/opt/keyserver/dotenv
+ExecStartPre=docker compose -f docker-compose.yaml run --rm create
+ExecStart=docker compose -f docker-compose.yaml up site
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,10 @@
+[Unit]
+Description=keyserver path
+
+[Path]
+Unit=kscreate.service
+PathModified=/opt/keyserver/watch/mrdl_ubuntu.pub
+PathModified=/opt/keyserver/watch/mrdl_ca.pub
+
+[Install]
+WantedBy=kscreate.service

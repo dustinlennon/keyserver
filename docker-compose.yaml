@@ -26,8 +26,9 @@ services:
     volumes:
     - conf:/home/keyserver/conf
     - assets:/home/keyserver/assets
+    - logs:/home/keyserver/logs
 
-    stop_grace_period: 1s
+    # stop_grace_period: 1s
 
   create:
     image: keyserver:latest

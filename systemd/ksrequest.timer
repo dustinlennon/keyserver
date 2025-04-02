@@ -1,0 +1,11 @@
+[Unit]
+After=multi-user.target
+# RefuseManualStart=True
+# StopPropagatedFrom=ups-on-battery.service
+
+[Timer]
+Unit=ksrequest.service
+AccuracySec=1s
+# OnActiveSec=2min
+OnActiveSec=30s
+RemainAfterElapse=false

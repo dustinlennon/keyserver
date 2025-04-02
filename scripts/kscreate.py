@@ -21,7 +21,7 @@ class KsCreateParams(BaseParams, CommonParams):
 if __name__ == '__main__':
 
   params  = KsCreateParams.build()
-  logger  = params.get_logger(__name__)
+  logger  = params.get_logger("keyserver.kscreate")
 
   # public key metadata
   pk_map = {

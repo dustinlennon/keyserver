@@ -27,7 +27,7 @@ class KsRequestParams(BaseParams, LoggerInitializerMixin):
 if __name__ == '__main__':
 
   params  = KsRequestParams.build()
-  logger  = params.get_logger(__name__)
+  logger  = params.get_logger("keyserver.ksrequest")
 
   # Create output directory
   pth = Path(params.keys_path)

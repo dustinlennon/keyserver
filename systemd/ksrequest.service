@@ -1,0 +1,11 @@
+[Unit]
+StopWhenUnneeded=true
+After=multi-user.target
+ #RefuseManualStart=True
+# ConditionPathExists=/opt/ups-notify/ups-on-battery
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/keyserver
+EnvironmentFile=/opt/keyserver/dotenv
+ExecStart=docker compose -f docker-compose.yaml run --rm request

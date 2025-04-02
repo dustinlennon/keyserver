@@ -23,7 +23,7 @@ class KsSiteParams(BaseParams, LoggerInitializerMixin):
 # --- FileRequestHandler ------------------------------------------------------
 
 class FileRequestHandler(SimpleHTTPRequestHandler):
-  logger = logging.getLogger(__name__)
+  logger = logging.getLogger("keyserver.kssite")
 
   def list_directory(self, path):
     self.send_error(

@@ -20,5 +20,5 @@ conf:
   logger:
     loggers:
     - level: INFO
-      logfile: ksrequest.log
+      logfile: keyserver.log
       add_console: True

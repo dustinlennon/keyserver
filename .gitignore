@@ -7,3 +7,4 @@ assets
 logs
 .env
 *tgz
+watch

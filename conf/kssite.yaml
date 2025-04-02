@@ -15,6 +15,6 @@ conf:
   logger:
     loggers:
     - level: INFO
-      logfile: kssite.log
+      logfile: keyserver.log
       add_console: True
       propagate: False

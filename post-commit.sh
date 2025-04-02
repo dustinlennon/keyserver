@@ -10,13 +10,14 @@ keyserver_path=/opt/keyserver
 install_path=/home/dnlennon/Workspace/Sandbox/keyserver-service
 
 if [ ! -d "$keyserver_path" ]; then
-	sudo mkdir -p "$keyserver_path"
+	sudo mkdir -p "$keyserver_path"	
 	sudo chown root:adm "$keyserver_path"
 	sudo chmod 2775 "$keyserver_path"
 	ln ${PWD}/freshen-keys.sh "$keyserver_path"
+	mkdir -p "$keyserver_path/keys"
 fi
 
-dirs=(assets conf keys)
+dirs=(assets conf)
 for d in ${dirs[@]}; do
 	mkdir -p "${keyserver_path}/$d"
 	find -L "$install_path/$d" -type f | xargs -I% realpath % | xargs -I% ln -f % ${keyserver_path}/${d}

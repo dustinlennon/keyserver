@@ -1,19 +1,87 @@
-# docker-compose -f docker-compose.yaml up -d
+#
+# Serve assets:
+#   KEYSERVER_PATH=$PWD docker compose -f docker-compose.yaml up site
+#
+# Create assets:
+#   KEYSERVER_PATH=$PWD docker compose -f docker-compose.yaml run --rm create
+#
+# Request assets:
+#   KEYSERVER_PATH=$PWD docker compose -f docker-compose.yaml run --rm request
+
+name: keyserver
 
 services:
-  web:
-    container_name: keyserver.service
+  site:
+    image: keyserver:latest
 
-    image: "busybox:1.36.1-glibc"
-
-    command: "httpd -v -f -h /var/www/html"
+    command: >
+      python3 -m http.server
+        -d /home/keyserver/assets 80
 
     ports:
-      - "8022:80"
+    - "8022:80"
 
     volumes:
-      - type: bind
-        source: ${KEYSERVER_HOME}/www
-        target: /var/www
+    - assets:/home/keyserver/assets
 
     stop_grace_period: 1s
+
+  create:
+    image: keyserver:latest
+
+    command: >
+      python3 scripts/kscreate.py
+
+    environment:
+    - KEYSERVER_CONFIG_PATH=/home/keyserver/conf/kscreate.yaml
+    - KEYSERVER_KEYS_PATH=/home/keyserver/keys
+
+    volumes:
+    - conf:/home/keyserver/conf
+    - keys:/home/keyserver/keys
+    - assets:/home/keyserver/assets
+    - logs:/home/keyserver/logs
+
+    stop_grace_period: 1s
+
+  request:
+    image: keyserver:latest
+
+    command: >
+      python3 scripts/ksrequest.py
+
+    environment:
+    - KSCLIENT_CONFIG_PATH=/home/keyserver/conf/ksrequest.yaml
+
+    volumes:
+    - conf:/home/keyserver/conf
+    - logs:/home/keyserver/logs
+
+
+volumes:
+  stub: 
+    driver_opts: &dopt
+      o: bind
+      type: local
+      device: ${KEYSERVER_PATH}
+
+  assets:
+    driver_opts: 
+      <<: *dopt
+      device: ${KEYSERVER_PATH}/assets
+
+  conf:
+    driver_opts:
+      <<: *dopt
+      device: ${KEYSERVER_PATH}/conf
+
+  logs:
+    driver_opts:
+      <<: *dopt
+      device: /var/log/scaffold-logs
+
+  keys:
+    driver_opts:
+      <<: *dopt
+      device: /home/dnlennon/.ssh/keys/mrdl
+

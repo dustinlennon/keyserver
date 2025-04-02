@@ -1,5 +1,5 @@
 # updated at {{ updated_at }}
-{{ keys.ubuntu }}
+{{ key }}
 {% if include_cert -%}
-cert-authority,principals="ubuntu" {{ keys.ca }}
+cert-authority,principals="{{user}}" {{ cert }}
 {% endif %}

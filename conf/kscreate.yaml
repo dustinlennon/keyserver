@@ -1,0 +1,24 @@
+env_base: &base
+  install_path: !env ${PWD}
+
+env_logger: &logger
+  logs_path: ./logs
+
+env_template: &template
+  template_path: !env ./templates
+
+env:
+  <<: [*base, *logger, *template]
+  keys_path: !env ${HOME}/.ssh/keys/mrdl
+  assets_path: ./assets
+
+conf: 
+  kscreate:
+    pk_map:
+      ca:     mrdl_ca.pub
+      ubuntu: mrdl_ubuntu.pub
+  logger:
+    loggers:
+    - level: INFO
+      logfile: kscreate.log
+      add_console: True

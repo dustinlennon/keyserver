@@ -1,6 +1,9 @@
+[Unit]
+Description=keyserver path
+
 [Path]
 PathModified=/opt/keyserver/keys/mrdl_ubuntu.pub
 PathModified=/opt/keyserver/keys/mrdl_ca.pub
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=keyserver.service

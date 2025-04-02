@@ -1,6 +1,5 @@
 [Unit]
 Description=key server
-After=network-online.target
 Before=authorized-keys-watcher.path
 Requires=keyserver-watcher.path keyserver-watcher.service
 

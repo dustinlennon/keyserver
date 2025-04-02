@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+jinja2 = "*"
+requests = "*"
+pyyaml = "*"
+pytz = "*"
+scaffold = {ref = "v0.0.5", git = "https://github.com/dustinlennon/scaffold-params"}
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"
+python_full_version = "3.12.3"

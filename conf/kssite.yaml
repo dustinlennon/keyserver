@@ -1,0 +1,19 @@
+env_base: &base
+  install_path: !env ${PWD}
+
+env_logger: &logger
+  logs_path: ./logs
+
+env:
+  <<: [*base, *logger]
+  assets_path: ./assets
+
+conf: 
+  main:
+    bind_addr: 0.0.0.0
+    port: 8022
+  logger:
+    loggers:
+    - level: INFO
+      logfile: kssite.log
+      add_console: True

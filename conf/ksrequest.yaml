@@ -10,11 +10,12 @@ env:
   keys_path: !env ${HOME}/.ssh/keys/ksclient
 
 conf: 
-  ksrequest:
+  main:
     url:
       scheme: http
       netloc: 192.168.1.104:8022
       path: ubuntu_key_cert
+    pubkey: mrdl_ubuntu.pub
 
   logger:
     loggers:

@@ -15,13 +15,16 @@ services:
     image: keyserver:latest
 
     command: >
-      python3 -m http.server
-        -d /home/keyserver/assets 80
+      python3 scripts/kssite.py 
+
+    environment:
+    - KSSITE_CONFIG_PATH=/home/keyserver/conf/kssite.yaml
 
     ports:
-    - "8022:80"
+    - "8022:8022"
 
     volumes:
+    - conf:/home/keyserver/conf
     - assets:/home/keyserver/assets
 
     stop_grace_period: 1s
@@ -33,8 +36,8 @@ services:
       python3 scripts/kscreate.py
 
     environment:
-    - KEYSERVER_CONFIG_PATH=/home/keyserver/conf/kscreate.yaml
-    - KEYSERVER_KEYS_PATH=/home/keyserver/keys
+    - KSCREATE_CONFIG_PATH=/home/keyserver/conf/kscreate.yaml
+    - KSCREATE_KEYS_PATH=/home/keyserver/keys
 
     volumes:
     - conf:/home/keyserver/conf
@@ -51,7 +54,7 @@ services:
       python3 scripts/ksrequest.py
 
     environment:
-    - KSCLIENT_CONFIG_PATH=/home/keyserver/conf/ksrequest.yaml
+    - KSREQUEST_CONFIG_PATH=/home/keyserver/conf/ksrequest.yaml
 
     volumes:
     - conf:/home/keyserver/conf
@@ -78,7 +81,7 @@ volumes:
   logs:
     driver_opts:
       <<: *dopt
-      device: /var/log/scaffold-logs
+      device: /var/log/scaffold
 
   keys:
     driver_opts:

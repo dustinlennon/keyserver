@@ -1,21 +1,24 @@
 from scaffold.params.base_params import BaseParams
 from scaffold.params.mixins import *
-from scaffold.debug import TraceClassDecorator
+
+# --- KsCreateParams ----------------------------------------------------------
+
+class CommonParams(NowMixin, LoggerInitializerMixin, JinjaTemplateMixin):
+  pass
+
+class KsCreateParams(BaseParams, CommonParams):
+  _prefix = "KSCREATE"
+
+  def assign_params(self, conf, args):
+    super().assign_params(conf, args)
+    self.keys_path    = str(args.keys_path)
+    self.assets_path  = args.assets_path
+    self.pk_map       = conf.main.pk_map
+
+
+# --- main --------------------------------------------------------------------
 
 if __name__ == '__main__':
-
-  class CommonParams(NowMixin, LoggerInitMixin, JinjaTemplateMixin):
-    pass
-
-  # @TraceClassDecorator(mro = True)
-  class KsCreateParams(BaseParams, CommonParams):
-    _prefix = "KSCREATE"
-
-    def assign_args(self, conf, args):
-      super().assign_args(conf, args)
-      self.keys_path    = args.keys_path
-      self.assets_path  = args.assets_path
-      self.pk_map       = conf.kscreate.pk_map
 
   params  = KsCreateParams.build()
   logger  = params.get_logger(__name__)

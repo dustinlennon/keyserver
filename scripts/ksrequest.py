@@ -8,17 +8,23 @@ from scaffold.params.mixins import *
 import requests
 import requests.exceptions
 
+# --- KsRequestParams ---------------------------------------------------------
+
+class KsRequestParams(BaseParams, LoggerInitializerMixin):
+  _prefix = "KSREQUEST"
+
+  def assign_params(self, conf, args):
+    super().assign_params(conf, args)
+    self.keys_path    = str(args.keys_path)
+
+    u = conf.main.url
+    self.url = f"{u.scheme}://{u.netloc}/{u.path}"
+
+    self.pubkey = conf.main.pubkey
+
+# --- main --------------------------------------------------------------------
+
 if __name__ == '__main__':
-
-  class KsRequestParams(BaseParams, NowMixin, LoggerInitMixin):
-    _prefix = "KSREQUEST"
-
-    def assign_args(self, conf, args):
-      super().assign_args(conf, args)
-      self.keys_path    = str(args.keys_path)
-
-      u = conf.ksrequest.url
-      self.url = f"{u.scheme}://{u.netloc}/{u.path}"
 
   params  = KsRequestParams.build()
   logger  = params.get_logger(__name__)
@@ -47,7 +53,7 @@ if __name__ == '__main__':
 
   # Output the file
   try:
-    pk = pth / f"{u.path}.pub"
+    pk = pth / params.pubkey
     with open(pk, "wb") as f:
       f.write(content)
     logger.info(f"wrote {pk}")

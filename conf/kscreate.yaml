@@ -4,16 +4,19 @@ env_base: &base
 env_logger: &logger
   logs_path: ./logs
 
+env_timezone: &timezone
+  timezone: US/Pacific
+
 env_template: &template
   template_path: !env ./templates
 
 env:
-  <<: [*base, *logger, *template]
+  <<: [*base, *logger, *timezone, *template]
   keys_path: !env ${HOME}/.ssh/keys/mrdl
   assets_path: ./assets
 
 conf: 
-  kscreate:
+  main:
     pk_map:
       ca:     mrdl_ca.pub
       ubuntu: mrdl_ubuntu.pub

@@ -7,5 +7,5 @@ markupsafe==3.0.2; python_version >= '3.9'
 pytz==2025.2
 pyyaml==6.0.2; python_version >= '3.8'
 requests==2.32.3; python_version >= '3.8'
-scaffold @ git+https://github.com/dustinlennon/scaffold-params@0ec303a39fa3c87042469f2f1f17dbb7bb2ab75e
+scaffold @ git+https://github.com/dustinlennon/scaffold-params@4240c6b68a1565c3d0cb7578bfbc6592270dae7d
 urllib3==2.3.0; python_version >= '3.9'

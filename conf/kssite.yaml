@@ -17,3 +17,4 @@ conf:
     - level: INFO
       logfile: kssite.log
       add_console: True
+      propagate: False

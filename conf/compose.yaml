@@ -1,12 +1,14 @@
+# Refresh /opt/keyserver
+#   ./build_image.sh && ./post-commit.sh
 #
 # Serve assets:
-#   KEYSERVER_PATH=$PWD docker compose -f docker-compose.yaml up site
+#   docker compose -f /opt/keyserver/conf/compose.yaml up site
 #
 # Create assets:
-#   KEYSERVER_PATH=$PWD docker compose -f docker-compose.yaml run --rm create
+#   docker compose -f /opt/keyserver/conf/compose.yaml run --rm create
 #
 # Request assets:
-#   KEYSERVER_PATH=$PWD docker compose -f docker-compose.yaml run --rm request
+#   docker compose -f /opt/keyserver/conf/compose.yaml run --rm request
 
 name: keyserver
 
@@ -19,6 +21,8 @@ services:
 
     environment:
     - KSSITE_CONFIG_PATH=/home/keyserver/conf/kssite.yaml
+    - KSSITE_LOGS_PATH=/home/keyserver/logs
+    - KSSITE_ASSETS_PATH=/home/keyserver/assets
 
     ports:
     - "8022:8022"
@@ -28,7 +32,7 @@ services:
     - assets:/home/keyserver/assets
     - logs:/home/keyserver/logs
 
-    # stop_grace_period: 1s
+    stop_grace_period: 1s
 
   create:
     image: keyserver:latest
@@ -39,6 +43,8 @@ services:
     environment:
     - KSCREATE_CONFIG_PATH=/home/keyserver/conf/kscreate.yaml
     - KSCREATE_KEYS_PATH=/home/keyserver/keys
+    - KSCREATE_LOGS_PATH=/home/keyserver/logs
+    - KSCREATE_ASSETS_PATH=/home/keyserver/assets
 
     volumes:
     - conf:/home/keyserver/conf
@@ -56,6 +62,7 @@ services:
 
     environment:
     - KSREQUEST_CONFIG_PATH=/home/keyserver/conf/ksrequest.yaml
+    - KSREQUEST_LOGS_PATH=/home/keyserver/logs
 
     volumes:
     - conf:/home/keyserver/conf
@@ -63,29 +70,25 @@ services:
 
 
 volumes:
-  stub: 
+ 
+  assets:
     driver_opts: &dopt
       o: bind
       type: local
-      device: ${KEYSERVER_PATH}
-
-  assets:
-    driver_opts: 
-      <<: *dopt
-      device: ${KEYSERVER_PATH}/assets
+      device: /opt/keyserver/assets
 
   conf:
     driver_opts:
       <<: *dopt
-      device: ${KEYSERVER_PATH}/conf
+      device: /opt/keyserver/conf
+
+  keys:
+    driver_opts:
+      <<: *dopt
+      device: /opt/keyserver/keys
 
   logs:
     driver_opts:
       <<: *dopt
       device: /var/log/scaffold
-
-  keys:
-    driver_opts:
-      <<: *dopt
-      device: /home/dnlennon/.ssh/keys/mrdl
 

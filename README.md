@@ -2,6 +2,7 @@
 Run Locally
 ====
 
+N.B., logging will be in ./logs/keyserver.log
 
 ```bash
 #site
@@ -18,16 +19,40 @@ pipenv run python3 scripts/ksrequest.py
 Run Dockerized
 ====
 
+N.B., logging will be in /var/log/scaffold/keyserver.log
+
 ```bash
-SCAFFOLD_IMAGE_NAME=keyserver ./build_image.sh
+# Refresh /opt/keyserver
+SCAFFOLD_IMAGE_NAME=keyserver ./build_image.sh && ./post-commit.sh
 
-# site
-KEYSERVER_PATH=$PWD docker compose -f docker-compose.yaml up site
+# Serve assets:
+docker compose -f /opt/keyserver/conf/compose.yaml up site
 
-# create
-KEYSERVER_PATH=$PWD docker compose -f docker-compose.yaml run --rm create
+# Create assets:
+docker compose -f /opt/keyserver/conf/compose.yaml run --rm create
 
-# request
-KEYSERVER_PATH=$PWD docker compose -f docker-compose.yaml run --rm request
+# Request assets:
+docker compose -f /opt/keyserver/conf/compose.yaml run --rm request
 
+```
+
+
+Systemd
+====
+
+
+```bash
+# enable the unit files:
+sudo systemctl enable \
+	./kssite.service \
+	./kscreate.service \
+	./kscreate-watcher.path
+
+# (re)start the services
+sudo systemctl restart kssite.service 
+sudo systemctl restart kscreate-watcher.path
+
+# cleanup / reset
+sudo systemctl daemon-reload 
+sudo systemctl reset-failed 
 ```

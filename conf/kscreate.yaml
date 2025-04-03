@@ -8,18 +8,19 @@ env_timezone: &timezone
   timezone: US/Pacific
 
 env_template: &template
-  template_path: !env ./templates
+  template_path: ./templates
 
 env:
   <<: [*base, *logger, *timezone, *template]
-  keys_path: !env ${HOME}/.ssh/keys/mrdl
-  assets_path: ./assets
+  keys_path: /opt/keyserver/keys
+  assets_path: /opt/keyserver/assets
 
 conf: 
   main:
     pk_map:
       ca:     mrdl_ca.pub
       ubuntu: mrdl_ubuntu.pub
+
   logger:
     loggers:
     - level: INFO

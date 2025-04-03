@@ -21,6 +21,8 @@ services:
 
     environment:
     - KSSITE_CONFIG_PATH=/home/keyserver/conf/kssite.yaml
+    - KSSITE_LOGS_PATH=/home/keyserver/logs
+    - KSSITE_ASSETS_PATH=/home/keyserver/assets
 
     ports:
     - "8022:8022"
@@ -41,6 +43,8 @@ services:
     environment:
     - KSCREATE_CONFIG_PATH=/home/keyserver/conf/kscreate.yaml
     - KSCREATE_KEYS_PATH=/home/keyserver/keys
+    - KSCREATE_LOGS_PATH=/home/keyserver/logs
+    - KSCREATE_ASSETS_PATH=/home/keyserver/assets
 
     volumes:
     - conf:/home/keyserver/conf
@@ -58,6 +62,7 @@ services:
 
     environment:
     - KSREQUEST_CONFIG_PATH=/home/keyserver/conf/ksrequest.yaml
+    - KSREQUEST_LOGS_PATH=/home/keyserver/logs
 
     volumes:
     - conf:/home/keyserver/conf

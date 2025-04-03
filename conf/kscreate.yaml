@@ -8,12 +8,12 @@ env_timezone: &timezone
   timezone: US/Pacific
 
 env_template: &template
-  template_path: !env ./templates
+  template_path: ./templates
 
 env:
   <<: [*base, *logger, *timezone, *template]
-  keys_path: ./keys
-  assets_path: ./assets
+  keys_path: /opt/keyserver/keys
+  assets_path: /opt/keyserver/assets
 
 conf: 
   main:

@@ -13,12 +13,24 @@ if [ ! -d "$keyserver_path" ]; then
 	sudo mkdir -p "$keyserver_path"	
 	sudo chown root:adm "$keyserver_path"
 	sudo chmod 2775 "$keyserver_path"
-	ln ${PWD}/freshen-keys.sh "$keyserver_path"
+
+	mkdir -p "$keyserver_path/assets"
+	mkdir -p "$keyserver_path/conf"
 	mkdir -p "$keyserver_path/keys"
+
+	ln ${PWD}/freshen-keys.sh "$keyserver_path"
 fi
 
-dirs=(assets conf)
-for d in ${dirs[@]}; do
-	mkdir -p "${keyserver_path}/$d"
-	find -L "$install_path/$d" -type f | xargs -I% realpath % | xargs -I% ln -f % ${keyserver_path}/${d}
-done
+# Copy the public keys
+>&2 echo ">>> copying public keys"
+${PWD}/freshen-keys.sh
+
+# Initialize the assets
+>&2 echo ">>> initializing assets"
+pipenv run python scripts/kscreate.py
+
+# Create hard links to conf
+>&2 echo ">>> creating hard links"
+find "${install_path}/conf" -type f | xargs -I% ln -f % ${keyserver_path}/conf
+
+
